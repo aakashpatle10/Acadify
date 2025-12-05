@@ -1,6 +1,7 @@
+// controllers/attendance.controller.js
 import ClassSession from '../models/ClassSession.model.js';
 import Attendance from '../models/Attendance.model.js';
-import qrService from '../services/Qr.service.js';
+import {QRService} from '../services/Qr.service.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
 // Start a new class session
@@ -16,7 +17,7 @@ export const startSession = asyncHandler(async (req, res) => {
     });
 
     // Generate initial QR token
-    const token = qrService.generateToken(session._id.toString());
+    const token = QRService.generateToken(session._id.toString());
     session.activeQrToken = token;
     await session.save();
 
@@ -52,7 +53,7 @@ export const markAttendance = asyncHandler(async (req, res) => {
     const studentId = req.user._id;
 
     // Validate QR token
-    const isValid = qrService.validateToken(token, sessionId);
+    const isValid = QRService.validateToken(token, sessionId);
     if (!isValid) {
         return res.status(400).json({
             success: false,

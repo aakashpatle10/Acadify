@@ -1,3 +1,4 @@
+// middlewares/auth.middleware.js
 import jwtService from '../utils/jwt.js';
 import { AppError } from '../utils/errors.js';
 import { redisClient } from '../config/redis.js';
@@ -24,6 +25,16 @@ export const authMiddleware = async (req, res, next) => {
         req.userId = decoded.userId;
         req.enrollmentNumber = decoded.enrollmentNumber;
         req.roleId = decoded.roleId;
+
+        // Populate req.user for compatibility with requireRole and controllers
+        // Note: decoded.roleId actually contains the role name (e.g., "teacher", "admin", "student")
+        // because the login services pass role name as the third parameter to generateTokens
+        req.user = {
+            id: decoded.userId,
+            _id: decoded.userId,
+            role: decoded.roleId, // roleId field contains the role name
+            enrollmentNumber: decoded.enrollmentNumber
+        };
 
         next();
     } catch (error) {

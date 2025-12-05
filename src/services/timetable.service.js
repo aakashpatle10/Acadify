@@ -1,3 +1,4 @@
+// services/timetable.service.js
 import { TimetableRepositoryImpl } from "../repositories/implementations/MongoTimetableRepository.js";
 import Class from "../models/ClassSession.model.js";
 import Teacher from "../models/teacher.model.js";

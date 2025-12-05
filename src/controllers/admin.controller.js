@@ -1,3 +1,4 @@
+// controllers/admin.controller.js
 import AdminService from '../services/admin.service.js';
 import jwtService from '../utils/jwt.js';
 import { redisClient } from '../config/redis.js';

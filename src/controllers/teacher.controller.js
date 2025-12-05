@@ -1,3 +1,4 @@
+// controllers/teacher.controller.js
 import TeacherService from '../services/teacher.service.js';
 import { AppError } from '../utils/errors.js';
 

@@ -1,3 +1,4 @@
+// services/admin.service.js
 import MongoAdminRepository from '../repositories/implementations/MongoAdminRepository.js';
 import jwtService from '../utils/jwt.js';
 import { AppError } from '../utils/errors.js';

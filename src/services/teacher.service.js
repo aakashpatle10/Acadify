@@ -1,3 +1,4 @@
+// services/teacher.service.js
 import MongoTeacherRepository from '../repositories/implementations/MongoTeacherRepository.js';
 import jwtService from '../utils/jwt.js';
 import { AppError } from '../utils/errors.js';

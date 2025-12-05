@@ -1,3 +1,4 @@
+// models/ClassSession.model.js
 import mongoose from 'mongoose';
 
 const classSessionSchema = new mongoose.Schema({

@@ -1,3 +1,4 @@
+// repositories/implementations/MongoAdminRepository.js
 import IAdminRepository from '../contracts/IAdminRepository.js';
 import Admin from '../../models/admin.model.js';
 import { AppError } from '../../utils/errors.js';

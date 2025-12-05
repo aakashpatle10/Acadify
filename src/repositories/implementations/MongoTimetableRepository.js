@@ -1,3 +1,4 @@
+// repositories/implementations/MongoTimetableRepository.js
 import Timetable from "../../models/timetable.model.js";
 import { ITimetableRepository } from "../contracts/ITimetableRepository.js";
 

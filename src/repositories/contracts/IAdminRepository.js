@@ -1,3 +1,4 @@
+// repositories/contracts/IAdminRepository.js
 class IAdminRepository {
     async findAdminByEmail(email) {
         throw new Error('Method not implemented');

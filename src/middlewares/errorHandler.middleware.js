@@ -1,3 +1,4 @@
+// middlewares/errorHandler.middleware.js
 import logger from '../utils/logger.js';
 
 const errorHandler = (err, req, res, next) => {

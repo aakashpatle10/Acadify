@@ -1,3 +1,4 @@
+// middlewares/validators/student.validator.js
 import Joi from 'joi';
 import { AppError } from '../../utils/errors.js';
 

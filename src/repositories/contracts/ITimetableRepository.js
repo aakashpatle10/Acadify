@@ -1,3 +1,4 @@
+// repositories/contracts/ITimetableRepository.js
 export class ITimetableRepository {
   findExisting(classId, teacherId, day, startTime) {
     throw new Error("Method not implemented.");

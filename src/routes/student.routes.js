@@ -1,3 +1,4 @@
+// routes/student.routes.js
 import express from 'express';
 import studentController from '../controllers/student.controller.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';

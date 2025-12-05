@@ -1,3 +1,4 @@
+// routes/schedule.routes.js
 import express from 'express';
 import {
     generateSchedule,

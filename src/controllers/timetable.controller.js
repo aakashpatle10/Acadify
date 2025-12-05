@@ -1,3 +1,4 @@
+// controllers/timetable.controller.js
 import { TimetableService } from "../services/timetable.service.js";
 import { importTimetableValidator as timetableImportSchema } from "../middlewares/validators/timetable.validation.js";
 

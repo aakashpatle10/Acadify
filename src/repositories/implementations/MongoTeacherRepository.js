@@ -1,3 +1,4 @@
+// repositories/implementations/MongoTeacherRepository.js
 import ITeacherRepository from '../contracts/ITeacherRepository.js';
 import Teacher from '../../models/teacher.model.js';
 import { AppError } from '../../utils/errors.js';

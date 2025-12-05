@@ -1,3 +1,4 @@
+// services/ai.service.js
 import axios from 'axios';
 import config from '../config/environment.js';
 import logger from '../utils/logger.js';

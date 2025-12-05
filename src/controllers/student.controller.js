@@ -1,3 +1,4 @@
+// controllers/student.controller.js
 import StudentService from '../services/student.service.js';
 import jwtService from '../utils/jwt.js';
 import { redisClient } from '../config/redis.js';

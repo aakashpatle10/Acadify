@@ -1,3 +1,4 @@
+// controllers/analytics.controller.js
 import Attendance from '../models/Attendance.model.js';
 import ClassSession from '../models/ClassSession.model.js';
 import Teacher from '../models/teacher.model.js';

@@ -1,3 +1,4 @@
+// config/corsOptions.js
 const allowedOrigins = [
     'http://localhost:3000',  // React dev server
     'http://localhost:3001',  // Alternative port

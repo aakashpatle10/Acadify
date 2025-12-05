@@ -1,3 +1,4 @@
+// controllers/schedule.controller.js
 import Schedule from '../models/Schedule.model.js';
 import Substitution from '../models/Substitution.model.js';
 import Teacher from '../models/teacher.model.js';

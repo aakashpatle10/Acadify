@@ -1,3 +1,4 @@
+// utils/seed-test-users.js
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import Admin from '../models/admin.model.js';

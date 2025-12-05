@@ -1,3 +1,4 @@
+// services/student.service.js
 import MongoStudentRepository from '../repositories/implementations/MongoStudentRepository.js';
 import jwtService from '../utils/jwt.js';
 import { AppError } from '../utils/errors.js';

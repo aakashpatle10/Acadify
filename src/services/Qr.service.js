@@ -1,75 +1,83 @@
-import crypto from 'crypto';
-import config from '../config/environment.js';
+// services/Qr.service.js
+import QRCode from "qrcode";
+import Timetable from "../models/timetable.model.js";
+import Teacher from "../models/teacher.model.js";
+import { QRSessionRepositoryImpl } from "../repositories/implementations/MongoQrSessionRepository.js";
+import { signAttendanceToken } from "../utils/attendanceToken.js";
+import { AppError } from "../utils/errors.js";
 
-const ALGORITHM = 'aes-256-cbc';
-// Ensure secret is 32 bytes. If not provided, use a fallback (INSECURE for production, but ok for prototype)
-const SECRET_KEY = config.QR_SECRET ? crypto.scryptSync(config.QR_SECRET, 'salt', 32) : crypto.scryptSync('default_secret_key_for_prototype', 'salt', 32);
-const IV_LENGTH = 16;
+const qrSessionRepo = new QRSessionRepositoryImpl();
 
-class QrService {
-    /**
-     * Generates an encrypted token for a class session.
-     * @param {string} classSessionId 
-     * @returns {string} Encrypted token (iv:encryptedData)
-     */
-    generateToken(classSessionId) {
-        const iv = crypto.randomBytes(IV_LENGTH);
-        const cipher = crypto.createCipheriv(ALGORITHM, SECRET_KEY, iv);
+// default 10 seconds, env se override kar sakte ho
+const DEFAULT_EXP_SECONDS = Number(
+  process.env.ATTENDANCE_QR_EXP_SECONDS || 10
+);
 
-        const payload = JSON.stringify({
-            sid: classSessionId,
-            ts: Date.now(),
-            nonce: crypto.randomBytes(4).toString('hex')
-        });
-
-        let encrypted = cipher.update(payload, 'utf8', 'hex');
-        encrypted += cipher.final('hex');
-
-        return `${iv.toString('hex')}:${encrypted}`;
+export class QRService {
+  /**
+   * Generate QR for a particular timetable slot
+   * - teacherUserId = req.user.id (User._id)
+   */
+  static async generateForTimetable({
+    timetableId,
+    teacherUserId,
+    expiresInSeconds,
+  }) {
+    // 1) Teacher profile lao (Teacher.userId == logged in user)
+    const teacher = await Teacher.findById(teacherUserId);
+    if (!teacher) {
+      throw new AppError("Teacher profile not found", 404);
     }
 
-    /**
-     * Validates a QR token.
-     * @param {string} token - The encrypted token
-     * @param {string} classSessionId - The expected session ID
-     * @param {number} validityWindowMs - Time window in ms (default 15s)
-     * @returns {boolean} True if valid
-     */
-    validateToken(token, classSessionId, validityWindowMs = 15000) {
-        try {
-            const [ivHex, encryptedHex] = token.split(':');
-            if (!ivHex || !encryptedHex) return false;
-
-            const iv = Buffer.from(ivHex, 'hex');
-            const decipher = crypto.createDecipheriv(ALGORITHM, SECRET_KEY, iv);
-
-            let decrypted = decipher.update(encryptedHex, 'hex', 'utf8');
-            decrypted += decipher.final('utf8');
-
-            const payload = JSON.parse(decrypted);
-
-            // 1. Check Session ID
-            if (payload.sid !== classSessionId.toString()) {
-                return false;
-            }
-
-            // 2. Check Timestamp (Expiration)
-            const now = Date.now();
-            if (now - payload.ts > validityWindowMs) {
-                return false; // Token expired
-            }
-
-            // 3. Future timestamp check (prevent time travel)
-            if (payload.ts > now + 5000) { // Allow 5s clock skew
-                return false;
-            }
-
-            return true;
-        } catch (error) {
-            // Decryption failed or JSON parse error
-            return false;
-        }
+    // 2) Timetable slot lao
+    const timetable = await Timetable.findById(timetableId).populate("classId");
+    if (!timetable) {
+      throw new AppError("Timetable not found", 404);
     }
+
+    // 3) Check: ye slot isi teacher ka hai ya nahi
+    if (String(timetable.teacherId) !== String(teacher._id)) {
+      throw new AppError("You are not assigned to this lecture", 403);
+    }
+
+    // 4) Expiry calculate karo (default 10 sec)
+    const seconds = expiresInSeconds || DEFAULT_EXP_SECONDS;
+    const issuedAt = new Date();
+    const expiresAt = new Date(issuedAt.getTime() + seconds * 1000);
+
+    // 5) Payload tayar karo
+    const payload = {
+      classId: String(timetable.classId),
+      timetableId: String(timetable._id),
+      teacherId: String(teacher._id),
+    };
+
+    // 6) JWT token sign karo (e.g. "10s")
+    const token = signAttendanceToken(payload, `${seconds}s`);
+
+    // 7) QRSession DB me save karo
+    const qrSession = await qrSessionRepo.create({
+      token,
+      classId: timetable.classId,
+      timetableId: timetable._id,
+      teacherId: teacher._id,
+      subject: timetable.subject,
+      issuedAt,
+      expiresAt,
+      active: true,
+    });
+
+    // 8) Token ko QR image me convert karo
+    const qrDataUri = await QRCode.toDataURL(token, {
+      errorCorrectionLevel: "M",
+    });
+
+    return {
+      sessionId: qrSession._id,
+      qrDataUri,
+      expiresAt,
+      token, // optional: frontend chaahe to react-qr se render kare
+    };
+  }
 }
 
-export default new QrService();

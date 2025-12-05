@@ -1,3 +1,4 @@
+// config/redis.js
 import redis from "redis";
 import config from "./environment.js";
 import logger from "../utils/logger.js";
