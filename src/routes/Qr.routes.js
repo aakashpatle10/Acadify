@@ -2,7 +2,7 @@
 import express from "express";
 import { QRController } from "../controllers/Qr.controller.js";
 import { authMiddleware, requireRole } from "../middlewares/auth.middleware.js";
-import { generateQrValidator } from "../middlewares/validators/Qr.validation.js";
+import { generateQrValidator } from "../middlewares/validators/qr.validation.js";
 
 const router = express.Router();
 
