@@ -1,5 +1,5 @@
 // controllers/Qr.controller.js
-import {QRService} from "../services/Qr.service.js";
+import {QRService} from "../services/qr.service.js";
 import { AppError } from "../utils/errors.js";
 
 export class QRController {
