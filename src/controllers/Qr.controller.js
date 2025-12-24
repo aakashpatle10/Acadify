@@ -7,7 +7,7 @@ export class QRController {
     try {
       console.log("REQ BODY ===>", req.body);
       const { timetableId, expiresInSeconds } = req.body;
-      const userId = req.user?.id; // authMiddleware se set hoga (User._id)
+      const userId = req.user?.id; 
 
       if (!userId) {
         return next(new AppError("Unauthorized", 401));
