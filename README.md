@@ -25,6 +25,7 @@ https://acadify-backend-553k.onrender.com/api
 - **Redis**
 - **JWT Authentication**
 - **Mongoose ODM**
+- **Tanstack Query**
 - **Axios / REST APIs**
 
 ---
