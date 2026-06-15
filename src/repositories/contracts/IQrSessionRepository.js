@@ -10,4 +10,8 @@ export class IQRSessionRepository {
   deactivateById(id) {
     throw new Error("Method not implemented.");
   }
+
+  incrementUses(id) {
+    throw new Error("Method not implemented.");
+  }
 }

@@ -4,7 +4,7 @@ export default class IAttendanceSessionRepository {
     throw new Error('Method not implemented');
   }
 
-  findActiveSessionByClassAndDate(classId, date) {
+  findActiveSessionByClassAndDate(classId, date, timetableId = null) {
     throw new Error('Method not implemented');
   }
 
@@ -13,6 +13,10 @@ export default class IAttendanceSessionRepository {
   }
 
   endSession(sessionId, endTime) {
+    throw new Error('Method not implemented');
+  }
+
+  incrementPresentCount(sessionId) {
     throw new Error('Method not implemented');
   }
 }

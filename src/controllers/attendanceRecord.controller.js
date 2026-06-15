@@ -5,13 +5,12 @@ import AttendanceRecordService from '../services/attendanceRecord.service.js';
 
 export const markAttendance = asyncHandler(async (req, res) => {
   const studentId = req.user.id; 
-  const { classId, date } = req.body;
+  const { token } = req.body;
 
   const record =
     await AttendanceRecordService.markAttendance({
       studentId,
-      classId,
-      date,
+      token,
     });
 
   res.status(201).json({

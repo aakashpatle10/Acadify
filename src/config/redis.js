@@ -17,7 +17,7 @@ client.on("error", (err) => {
 });
 
 client.on("connect", () => {
-  logger.info("✅ Redis connected successfully");
+  logger.info("Redis connected successfully");
 });
 
 export async function connectRedis() {

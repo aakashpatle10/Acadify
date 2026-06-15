@@ -10,8 +10,7 @@ router.post(
   "/generate",
   authMiddleware,
   requireRole("teacher"),
-  generateQrValidator,  
-  generateQrValidator,      
+  generateQrValidator,
   QRController.generate     
 );
 

@@ -11,7 +11,13 @@ const attendanceRecordSchema = new mongoose.Schema(
 
     classId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Class',
+      ref: 'ClassSession',
+      required: true,
+    },
+
+    timetableId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Timetable',
       required: true,
     },
 
@@ -36,7 +42,7 @@ const attendanceRecordSchema = new mongoose.Schema(
 
 
 attendanceRecordSchema.index(
-  { studentId: 1, classId: 1, date: 1 },
+  { studentId: 1, sessionId: 1 },
   { unique: true }
 );
 

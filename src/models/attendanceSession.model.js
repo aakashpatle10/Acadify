@@ -6,8 +6,13 @@ const attendanceSessionSchema = new mongoose.Schema(
   {
     classId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Class',
+      ref: 'ClassSession',
       required: true,
+    },
+
+    timetableId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Timetable',
     },
 
     date: {
@@ -34,12 +39,17 @@ const attendanceSessionSchema = new mongoose.Schema(
       type: Number, 
       default: 5,
     },
+
+    presentCount: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
 
 attendanceSessionSchema.index(
-  { classId: 1, date: 1, status: 1 },
+  { classId: 1, timetableId: 1, date: 1, status: 1 },
   { unique: true, partialFilterExpression: { status: 'ACTIVE' } }
 );
 

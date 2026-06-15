@@ -4,7 +4,6 @@ import { AppError } from "../utils/errors.js";
 export class QRController {
   static async generate(req, res, next) {
     try {
-      console.log("REQ BODY ===>", req.body);
       const { timetableId, expiresInSeconds } = req.body;
       const userId = req.user?.id; 
 

@@ -7,12 +7,18 @@ class MongoAttendanceSessionRepository extends IAttendanceSessionRepository {
     return AttendanceSession.create(data);
   }
 
-  async findActiveSessionByClassAndDate(classId, date) {
-    return AttendanceSession.findOne({
+  async findActiveSessionByClassAndDate(classId, date, timetableId = null) {
+    const query = {
       classId,
       date,
       status: 'ACTIVE',
-    });
+    };
+
+    if (timetableId) {
+      query.timetableId = timetableId;
+    }
+
+    return AttendanceSession.findOne(query);
   }
 
   async findById(sessionId) {
@@ -26,6 +32,14 @@ class MongoAttendanceSessionRepository extends IAttendanceSessionRepository {
         status: 'ENDED',
         endTime,
       },
+      { new: true }
+    );
+  }
+
+  async incrementPresentCount(sessionId) {
+    return AttendanceSession.findByIdAndUpdate(
+      sessionId,
+      { $inc: { presentCount: 1 } },
       { new: true }
     );
   }

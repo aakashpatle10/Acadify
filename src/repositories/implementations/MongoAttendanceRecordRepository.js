@@ -14,6 +14,13 @@ class MongoAttendanceRecordRepository extends IAttendanceRecordRepository {
     });
   }
 
+  async findByStudentAndSession(studentId, sessionId) {
+    return AttendanceRecord.findOne({
+      studentId,
+      sessionId,
+    });
+  }
+
   async findBySession(sessionId) {
     return AttendanceRecord.find({
       sessionId,

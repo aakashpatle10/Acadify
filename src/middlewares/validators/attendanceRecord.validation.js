@@ -3,13 +3,9 @@ import Joi from 'joi';
 import { AppError } from '../../utils/errors.js';
 
 const markAttendanceSchema = Joi.object({
-  classId: Joi.string().required().messages({
-    'string.empty': 'classId is required',
-    'any.required': 'classId is required',
-  }),
-  date: Joi.string().isoDate().required().messages({
-    'string.empty': 'date is required',
-    'date.format': 'Invalid date format',
+  token: Joi.string().required().messages({
+    'string.empty': 'QR token is required',
+    'any.required': 'QR token is required',
   }),
 });
 

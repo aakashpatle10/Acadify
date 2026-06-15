@@ -4,11 +4,12 @@ import { AppError } from '../utils/errors.js';
 
 class AttendanceSessionService {
  
-  async startSession({ classId, date }) {
+  async startSession({ classId, date, timetableId = null }) {
     const activeSession =
       await MongoAttendanceSessionRepository.findActiveSessionByClassAndDate(
         classId,
-        date
+        date,
+        timetableId
       );
 
     if (activeSession) {
@@ -21,6 +22,7 @@ class AttendanceSessionService {
     const session =
       await MongoAttendanceSessionRepository.createSession({
         classId,
+        timetableId,
         date,
         startTime: new Date(),
         status: 'ACTIVE',
@@ -29,11 +31,12 @@ class AttendanceSessionService {
     return session;
   }
 
-  async getActiveSession(classId, date) {
+  async getActiveSession(classId, date, timetableId = null) {
     const session =
       await MongoAttendanceSessionRepository.findActiveSessionByClassAndDate(
         classId,
-        date
+        date,
+        timetableId
       );
 
     if (!session) {
@@ -45,6 +48,43 @@ class AttendanceSessionService {
     }
 
     return session;
+  }
+
+  async getOrCreateActiveSession({ classId, date, timetableId }) {
+    const activeSession =
+      await MongoAttendanceSessionRepository.findActiveSessionByClassAndDate(
+        classId,
+        date,
+        timetableId
+      );
+
+    if (activeSession) {
+      return activeSession;
+    }
+
+    try {
+      return await MongoAttendanceSessionRepository.createSession({
+        classId,
+        timetableId,
+        date,
+        startTime: new Date(),
+        status: 'ACTIVE',
+      });
+    } catch (error) {
+      if (error.code === 11000) {
+        return MongoAttendanceSessionRepository.findActiveSessionByClassAndDate(
+          classId,
+          date,
+          timetableId
+        );
+      }
+
+      throw error;
+    }
+  }
+
+  async incrementPresentCount(sessionId) {
+    return MongoAttendanceSessionRepository.incrementPresentCount(sessionId);
   }
 
   async endSession(sessionId) {

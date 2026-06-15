@@ -17,4 +17,12 @@ export class QRSessionRepositoryImpl extends IQRSessionRepository {
       { new: true }
     );
   }
+
+  async incrementUses(id) {
+    return await QRSession.findByIdAndUpdate(
+      id,
+      { $inc: { uses: 1 } },
+      { new: true }
+    );
+  }
 }

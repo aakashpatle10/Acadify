@@ -42,6 +42,7 @@ export class QRService {
 
     
     const payload = {
+      classId: String(timetable.classSessionId),
       classSessionId: String(timetable.classSessionId),
       timetableId: String(timetable._id),
       teacherId: String(teacher._id),
@@ -75,4 +76,3 @@ export class QRService {
     };
   }
 }
-

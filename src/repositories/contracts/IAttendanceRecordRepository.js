@@ -10,6 +10,10 @@ export default class IAttendanceRecordRepository {
     throw new Error('Method not implemented');
   }
 
+  findByStudentAndSession(studentId, sessionId) {
+    throw new Error('Method not implemented');
+  }
+
   findBySession(sessionId) {
     throw new Error('Method not implemented');
   }
